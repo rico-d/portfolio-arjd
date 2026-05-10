@@ -8,7 +8,7 @@ on:
 
 env:
   # Replace with the exact name you gave your App Service in the portal
-  AZURE_WEBAPP_NAME: 'keebstore-api' 
+  AZURE_WEBAPP_NAME: 'portfolio-app-rico' 
   # Ensure this matches the runtime stack you selected
   NODE_VERSION: '20.x' 
 
@@ -65,6 +65,14 @@ jobs:
         run: |
           unzip -q server-release.zip
           ls -la
+
+      - name: Verify publish profile
+        run: |
+          if [ -z "${{ secrets.AZURE_PUBLISH_PROFILE }}" ]; then
+            echo "ERROR: AZURE_PUBLISH_PROFILE secret is not set!"
+            exit 1
+          fi
+          echo "Publish profile is configured"
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
