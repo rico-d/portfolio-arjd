@@ -33,7 +33,25 @@ app.use(express.json())
 app.use('/api/workers', workerRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/orders', orderRoutes)
-app.get('/api/health', (_req, res) => res.json({ status: 'ok' }))
+app.get('/api/health', (_req, res) => {
+  try {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() })
+  } catch (err) {
+    console.error('Health check error:', err)
+    res.status(500).json({ status: 'error', message: err.message })
+  }
+})
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('Middleware error:', err)
+  res.status(500).json({ 
+    status: 'error', 
+    message: err.message,
+    path: req.path,
+    method: req.method
+  })
+})
 
 // Connect to MongoDB (uses MongoMemoryServer if no local instance is available)
 async function startServer() {

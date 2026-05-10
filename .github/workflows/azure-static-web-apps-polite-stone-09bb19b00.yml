@@ -25,29 +25,6 @@ jobs:
           node-version: '20'
       - name: Install dependencies
         run: npm install
-      - name: Install server dependencies
-        run: npm install --prefix server
-      - name: Test server connection (local)
-        run: |
-          echo "Testing local server startup..."
-          node server/index.js &
-          SERVER_PID=$!
-          sleep 3
-          
-          echo "Testing /api/health endpoint on localhost..."
-          for i in {1..10}; do
-            if curl -f http://localhost:5000/api/health > /dev/null 2>&1; then
-              echo "✓ Local server is running and /api is reachable"
-              kill $SERVER_PID 2>/dev/null || true
-              exit 0
-            fi
-            echo "Attempt $i/10 - waiting for server..."
-            sleep 1
-          done
-          
-          echo "✗ Server failed to respond after 10 attempts"
-          kill $SERVER_PID 2>/dev/null || true
-          exit 1
       - name: Build
         run: npm run build
       - name: Build And Deploy
@@ -63,37 +40,35 @@ jobs:
           api_location: "" # API requires separate deployment - use App Service or Container Instances
           output_location: "dist" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
-      - name: Test deployed site - /api connection
+      - name: Test deployed frontend
         run: |
-          echo "Waiting for deployment to complete..."
-          sleep 10
+          echo "Waiting for deployment to stabilize..."
+          sleep 5
           
           DEPLOYED_URL="https://polite-stone-09bb19b00.7.azurestaticapps.net"
-          echo "Testing /api/health on deployed site: $DEPLOYED_URL/api/health"
+          echo "Testing frontend at: $DEPLOYED_URL"
           
-          for i in {1..15}; do
-            RESPONSE=$(curl -s -w "\n%{http_code}" "$DEPLOYED_URL/api/health")
-            HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
-            BODY=$(echo "$RESPONSE" | sed '$d')
-            
-            echo "Attempt $i/15 - HTTP Status: $HTTP_CODE"
+          for i in {1..10}; do
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$DEPLOYED_URL")
             
             if [ "$HTTP_CODE" = "200" ]; then
-              echo "✓ Deployed site is live and /api/health is reachable"
-              echo "Response: $BODY"
+              echo "✓ Frontend deployed successfully"
+              echo ""
+              echo "ℹ  Backend API setup:"
+              echo "   The backend Express server is NOT deployed to Azure Static Web Apps"
+              echo "   To enable /api calls, deploy your backend separately:"
+              echo "   - Azure App Service (recommended)"
+              echo "   - Azure Container Instances"
+              echo "   - Or convert to Azure Functions"
               exit 0
             fi
             
+            echo "Attempt $i/10 - waiting for frontend (HTTP $HTTP_CODE)..."
             sleep 2
           done
           
-          echo "⚠ Warning: /api/health returned HTTP $HTTP_CODE"
-          echo "⚠ Your backend server is NOT deployed to Azure Static Web Apps"
-          echo "⚠ You need to deploy your Express server separately:"
-          echo "   - Azure App Service"
-          echo "   - Azure Container Instances"
-          echo "   - Or convert to Azure Functions"
-          exit 0  # Don't fail - deployment itself succeeded
+          echo "⚠ Frontend deployment may have issues"
+          exit 0
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

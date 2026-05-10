@@ -4,37 +4,87 @@ import { API } from '../types'
 // ── API Helpers ──────────────────────────────────────────────────────────────
 
 export async function apiFetch<T>(endpoint: string): Promise<T> {
-  const res = await fetch(`${API}${endpoint}`)
-  if (!res.ok) throw new Error(`Failed to fetch ${endpoint}`)
-  return res.json()
+  try {
+    const res = await fetch(`${API}${endpoint}`)
+    
+    if (res.status === 500 || res.status === 502 || res.status === 503) {
+      console.error(`API server error (${res.status}) at ${endpoint}`)
+      console.error('Backend may not be deployed. Ensure backend is running or deployed separately.')
+      throw new Error(`Server error: ${res.status}`)
+    }
+    
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ message: `HTTP ${res.status}` }))
+      throw new Error(err.message || `Failed to fetch ${endpoint}`)
+    }
+    
+    return res.json()
+  } catch (err) {
+    console.error(`API fetch failed for ${endpoint}:`, err instanceof Error ? err.message : String(err))
+    throw err
+  }
 }
 
 export async function apiPost<T>(endpoint: string, body: unknown): Promise<T> {
-  const res = await fetch(`${API}${endpoint}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  })
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}))
-    throw new Error(err.message || `POST ${endpoint} failed`)
+  try {
+    const res = await fetch(`${API}${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+    
+    if (res.status === 500 || res.status === 502 || res.status === 503) {
+      console.error(`API server error (${res.status}) at ${endpoint}`)
+      throw new Error(`Server error: ${res.status}`)
+    }
+    
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ message: `HTTP ${res.status}` }))
+      throw new Error(err.message || `POST ${endpoint} failed`)
+    }
+    
+    return res.json()
+  } catch (err) {
+    console.error(`API POST failed for ${endpoint}:`, err instanceof Error ? err.message : String(err))
+    throw err
   }
-  return res.json()
 }
 
 export async function apiPut<T>(endpoint: string, body: unknown): Promise<T> {
-  const res = await fetch(`${API}${endpoint}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  })
-  if (!res.ok) throw new Error(`PUT ${endpoint} failed`)
-  return res.json()
+  try {
+    const res = await fetch(`${API}${endpoint}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+    
+    if (res.status === 500 || res.status === 502 || res.status === 503) {
+      console.error(`API server error (${res.status}) at ${endpoint}`)
+      throw new Error(`Server error: ${res.status}`)
+    }
+    
+    if (!res.ok) throw new Error(`PUT ${endpoint} failed`)
+    return res.json()
+  } catch (err) {
+    console.error(`API PUT failed for ${endpoint}:`, err instanceof Error ? err.message : String(err))
+    throw err
+  }
 }
 
 export async function apiDelete(endpoint: string): Promise<void> {
-  const res = await fetch(`${API}${endpoint}`, { method: 'DELETE' })
-  if (!res.ok) throw new Error(`DELETE ${endpoint} failed`)
+  try {
+    const res = await fetch(`${API}${endpoint}`, { method: 'DELETE' })
+    
+    if (res.status === 500 || res.status === 502 || res.status === 503) {
+      console.error(`API server error (${res.status}) at ${endpoint}`)
+      throw new Error(`Server error: ${res.status}`)
+    }
+    
+    if (!res.ok) throw new Error(`DELETE ${endpoint} failed`)
+  } catch (err) {
+    console.error(`API DELETE failed for ${endpoint}:`, err instanceof Error ? err.message : String(err))
+    throw err
+  }
 }
 
 // ── Cart Logic (pure state transformers) ─────────────────────────────────────

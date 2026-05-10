@@ -1,6 +1,11 @@
 {
   "routes": [
     {
+      "route": "/api/*",
+      "statusCode": 503,
+      "serve": null
+    },
+    {
       "route": "/*",
       "serve": "/index.html",
       "statusCode": 200
