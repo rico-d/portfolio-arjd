@@ -27,6 +27,27 @@ jobs:
         run: npm install
       - name: Install server dependencies
         run: npm install --prefix server
+      - name: Test server connection
+        run: |
+          echo "Starting server..."
+          node server/index.js &
+          SERVER_PID=$!
+          sleep 3
+          
+          echo "Testing /api/health endpoint..."
+          for i in {1..10}; do
+            if curl -f http://localhost:5000/api/health > /dev/null 2>&1; then
+              echo "✓ Server is running and /api is reachable"
+              kill $SERVER_PID 2>/dev/null || true
+              exit 0
+            fi
+            echo "Attempt $i/10 - waiting for server..."
+            sleep 1
+          done
+          
+          echo "✗ Server failed to respond after 10 attempts"
+          kill $SERVER_PID 2>/dev/null || true
+          exit 1
       - name: Build
         run: npm run build
       - name: Build And Deploy
