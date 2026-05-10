@@ -37,14 +37,20 @@ jobs:
           npm ci
           npm run build --if-present
 
+      - name: List directory contents for debugging
+        run: ls -la
+
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: |
+          cd .. && zip -r server-release.zip server -x "server/node_modules/*" "server/.git/*"
+          ls -lh server-release.zip
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: release.zip
+          path: server-release.zip
+          retention-days: 1
 
   deploy:
     runs-on: ubuntu-latest
@@ -56,13 +62,14 @@ jobs:
           name: node-app
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip
+        run: |
+          unzip -q server-release.zip
+          ls -la
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          # This pulls the secret we will set up in the next step
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }} 
-          package: .
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          package: ./server
