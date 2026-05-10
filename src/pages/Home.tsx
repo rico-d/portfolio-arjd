@@ -266,12 +266,12 @@ export default function Home() {
         </Container>
       </Box>
 
-      {/* Portfolio – Link to separate page */}
+      {/* Employee Table – Link to separate page */}
       <Box id="portfolio" sx={{ py: 10, bgcolor: '#0a0a0a' }}>
         <Container maxWidth="xl" sx={{ px: { xs: 3, lg: 8 } }}>
           <Stack direction="row" alignItems="center" spacing={1} mb={4}>
             <People sx={{ color: '#90caf9' }} />
-            <Typography variant="h4" fontWeight={700}>Portfolio</Typography>
+            <Typography variant="h4" fontWeight={700}>Employee Table</Typography>
           </Stack>
           <Divider sx={{ borderColor: '#222', mb: 4 }} />
           <Paper sx={{ p: 4, bgcolor: '#1a1a1a', border: '1px solid #222', borderRadius: 3, textAlign: 'center' }}>

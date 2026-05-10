@@ -57,7 +57,8 @@ export const DEMO_USERS: Record<Exclude<UserRole, 'guest'>, SimulatedUser> = {
   admin: { name: 'Rico Admin', email: 'admin@rico.dev', role: 'admin', avatar: 'R' },
 }
 
-export const API = 'http://localhost:5000/api'
+// Use relative API path for both local and deployed environments
+export const API = '/api'
 
 export const CATEGORIES = ['All', 'Electronics', 'Furniture', 'Accessories', 'Home']
 
