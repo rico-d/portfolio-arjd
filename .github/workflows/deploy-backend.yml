@@ -3,7 +3,7 @@ name: Build and deploy Node.js backend to Azure Web App
 on:
   push:
     branches:
-      - main # Or your default production branch
+      - master # Or your default production branch
   workflow_dispatch:
 
 env:
