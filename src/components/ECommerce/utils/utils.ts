@@ -3,9 +3,11 @@ import { API } from '../types'
 
 // ── API Helpers ──────────────────────────────────────────────────────────────
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export async function apiFetch<T>(endpoint: string): Promise<T> {
   try {
-    const res = await fetch(`${API}${endpoint}`)
+    const res = await fetch(`${API_URL || API}${endpoint}`)
     
     if (res.status === 500 || res.status === 502 || res.status === 503) {
       console.error(`API server error (${res.status}) at ${endpoint}`)
@@ -27,7 +29,7 @@ export async function apiFetch<T>(endpoint: string): Promise<T> {
 
 export async function apiPost<T>(endpoint: string, body: unknown): Promise<T> {
   try {
-    const res = await fetch(`${API}${endpoint}`, {
+    const res = await fetch(`${API_URL || API}${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -52,7 +54,7 @@ export async function apiPost<T>(endpoint: string, body: unknown): Promise<T> {
 
 export async function apiPut<T>(endpoint: string, body: unknown): Promise<T> {
   try {
-    const res = await fetch(`${API}${endpoint}`, {
+    const res = await fetch(`${API_URL || API}${endpoint}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -73,7 +75,7 @@ export async function apiPut<T>(endpoint: string, body: unknown): Promise<T> {
 
 export async function apiDelete(endpoint: string): Promise<void> {
   try {
-    const res = await fetch(`${API}${endpoint}`, { method: 'DELETE' })
+    const res = await fetch(`${API_URL || API}${endpoint}`, { method: 'DELETE' })
     
     if (res.status === 500 || res.status === 502 || res.status === 503) {
       console.error(`API server error (${res.status}) at ${endpoint}`)
