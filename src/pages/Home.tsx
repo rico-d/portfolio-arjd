@@ -9,14 +9,10 @@ import {
   Avatar,
   Chip,
   Grid,
-  Card,
-  CardContent,
-  CardActions,
   IconButton,
   Divider,
   Stack,
   Paper,
-  Link,
 } from '@mui/material'
 import {
   GitHub,
@@ -25,7 +21,6 @@ import {
   Code,
   Work,
   Person,
-  Launch,
   People,
   OpenInNew,
   ShoppingCart,
