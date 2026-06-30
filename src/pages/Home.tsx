@@ -27,13 +27,6 @@ import {
 } from '@mui/icons-material'
 import Bio from '../components/Bio'
 
-const skills = [
-  'React', 'TypeScript', 'JavaScript', 'Node.js',
-  'HTML5', 'CSS3', 'Material UI', 'Git',
-  'REST APIs', 'SQL', 'Python', 'Vite', '.NET Core', 'MongoDB', 'Express.js', 'Next.js',
-  'C#', 'Azure', 'Docker', 'Kubernetes', 'Jest', 'Redux', 'Sass',
-]
-
 const portfolioSamples = [
   {
     id: 'worker-management',
@@ -47,9 +40,9 @@ const portfolioSamples = [
   {
     id: 'ecommerce',
     title: 'Full-Stack E-Commerce Platform',
-    description: 'Product catalog, shopping cart, checkout with payment integration (Stripe/PayPal), and an admin dashboard for managing inventory and orders.',
+    description: 'Product catalog with shopping cart, checkout system, customer order tracking dashboard, and comprehensive admin panel for managing inventory, orders, and deliveries.',
     icon: 'ShoppingCart',
-    tags: ['User Roles', 'Payment APIs', 'Complex Data Modeling', 'CRUD', 'REST API', 'MongoDB'],
+    tags: ['User Roles', 'Role-Based Access', 'Complex Data Modeling', 'CRUD', 'REST API', 'MongoDB', 'Redux'],
     route: '/ecommerce',
     buttonLabel: 'Open E-Commerce Platform',
   },
@@ -77,7 +70,7 @@ export default function Home() {
             Rico.dev
           </Typography>
           <Stack direction="row" spacing={1}>
-            {['about', 'bio', 'skills', 'portfolio', 'contact'].map((section) => (
+            {['about', 'bio', 'portfolio', 'contact'].map((section) => (
               <Button key={section} sx={{ color: '#ccc', textTransform: 'capitalize' }}
                 onClick={() => scrollTo(section)}>
                 {section.charAt(0).toUpperCase() + section.slice(1)}
@@ -207,35 +200,7 @@ export default function Home() {
       <Box id="bio">
         <Bio />
       </Box>
-
-      {/* Skills */}
-      <Box id="skills" sx={{ py: 10, bgcolor: '#0a0a0a' }}>
-        <Container maxWidth="xl" sx={{ px: { xs: 3, lg: 8 } }}>
-          <Stack direction="row" alignItems="center" spacing={1} mb={4}>
-            <Code sx={{ color: '#90caf9' }} />
-            <Typography variant="h4" fontWeight={700}>Skills</Typography>
-          </Stack>
-          <Divider sx={{ borderColor: '#222', mb: 4 }} />
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
-            {skills.map((skill) => (
-              <Chip
-                key={skill}
-                label={skill}
-                sx={{
-                  bgcolor: '#1a237e22',
-                  color: '#90caf9',
-                  border: '1px solid #1565c0',
-                  fontWeight: 600,
-                  fontSize: 14,
-                  px: 1,
-                }}
-              />
-            ))}
-          </Box>
-        </Container>
-      </Box>
-
-    
+   
 
       {/* Portfolio Samples */}
       <Box id="portfolio" sx={{ py: 10, bgcolor: '#0a0a0a' }}>
