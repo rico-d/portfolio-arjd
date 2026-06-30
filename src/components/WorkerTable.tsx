@@ -66,6 +66,27 @@ const STATUSES: Array<'All' | Worker['status']> = ['All', 'Active', 'Inactive', 
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
+// Build API URL intelligently handling both local and deployed environments
+// Supports URLs like:
+//   - https://portfolio-arjd.onrender.com/api (base has /api)
+//   - http://localhost:5000 (base without /api)
+// Endpoints can be: /workers, /api/workers, workers
+const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
+
+function buildUrl(endpoint: string): string {
+  if (!API_BASE) return endpoint
+  
+  // Normalize endpoint
+  let normalized = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
+  
+  // If base already ends with /api and endpoint starts with /api, remove the /api from endpoint to avoid duplication
+  if (API_BASE.endsWith('/api') && normalized.startsWith('/api')) {
+    normalized = normalized.slice(4) // Remove /api prefix from endpoint
+  }
+  
+  return `${API_BASE}${normalized}`
+}
+
 interface SortCellProps {
   label: string
   field: SortKey
@@ -325,7 +346,7 @@ export default function WorkerTable() {
     setLoading(true)
     setApiError(null)
     try {
-      const res = await fetch('/api/workers')
+      const res = await fetch(buildUrl('/api/workers'))
       if (!res.ok) throw new Error(`Server error ${res.status}`)
       setWorkers(await res.json())
     } catch (err) {
@@ -342,7 +363,7 @@ export default function WorkerTable() {
   const handleAdd = async (data: Omit<Worker, '_id'>) => {
     setSaving(true)
     try {
-      const res = await fetch('/api/workers', {
+      const res = await fetch(buildUrl('/api/workers'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -360,7 +381,7 @@ export default function WorkerTable() {
     if (!editTarget?._id) return
     setSaving(true)
     try {
-      const res = await fetch(`/api/workers/${editTarget._id}`, {
+      const res = await fetch(buildUrl(`/api/workers/${editTarget._id}`), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -378,7 +399,7 @@ export default function WorkerTable() {
     if (!deleteTarget?._id) return
     setDeleting(true)
     try {
-      const res = await fetch(`/api/workers/${deleteTarget._id}`, { method: 'DELETE' })
+      const res = await fetch(buildUrl(`/api/workers/${deleteTarget._id}`), { method: 'DELETE' })
       if (!res.ok) throw new Error('Failed to delete worker')
       setWorkers((prev) => prev.filter((w) => w._id !== deleteTarget._id))
       setDeleteOpen(false)
