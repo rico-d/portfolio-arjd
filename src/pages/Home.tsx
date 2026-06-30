@@ -18,7 +18,6 @@ import {
   GitHub,
   LinkedIn,
   Email,
-  Code,
   Work,
   Person,
   People,
