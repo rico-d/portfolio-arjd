@@ -150,11 +150,15 @@ export default function Home() {
                   </IconButton>
                 </Stack>
                 <Stack direction="row" spacing={2}>
-                  <Button variant="contained" sx={{ bgcolor: '#1565c0', borderRadius: 2, px: 4 }}
+                  <Button variant="contained" startIcon={<Work />} sx={{ bgcolor: '#1565c0', borderRadius: 2, px: 4 }}
                     onClick={() => scrollTo('portfolio')}>
                     View Portfolio
                   </Button>
-                  <Button variant="outlined" sx={{ borderColor: '#444', color: '#ccc', borderRadius: 2, px: 4 }}
+                  <Button variant="contained" startIcon={<Person />} sx={{ bgcolor: '#1565c0', borderRadius: 2, px: 4 }}
+                    onClick={() => scrollTo('bio')}>
+                    View Bio
+                  </Button>
+                  <Button variant="outlined" startIcon={<Email />} sx={{ borderColor: '#444', color: '#ccc', borderRadius: 2, px: 4 }}
                     onClick={() => scrollTo('contact')}>
                     Contact Me
                   </Button>
@@ -200,7 +204,9 @@ export default function Home() {
       </Box>
 
       {/* Bio / CV */}
-      <Bio />
+      <Box id="bio">
+        <Bio />
+      </Box>
 
       {/* Skills */}
       <Box id="skills" sx={{ py: 10, bgcolor: '#0a0a0a' }}>
