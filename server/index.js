@@ -9,6 +9,7 @@ const orderRoutes   = require('./routes/orders')
 
 const app  = express()
 const PORT = process.env.PORT || 5000
+const path = require('path')
 
 // Middleware - Configure CORS for both local development and Azure deployment
 const allowedOrigins = [
@@ -39,6 +40,17 @@ app.get('/api/health', (_req, res) => {
   } catch (err) {
     console.error('Health check error:', err)
     res.status(500).json({ status: 'error', message: err.message })
+  }
+})
+
+// Serve static files from dist folder (production build)
+app.use(express.static(path.join(__dirname, '../dist')))
+
+// SPA fallback – serve index.html for all non-API routes
+app.use((req, res) => {
+  // Only serve index.html for non-API routes
+  if (!req.path.startsWith('/api/')) {
+    res.sendFile(path.join(__dirname, '../dist/index.html'))
   }
 })
 

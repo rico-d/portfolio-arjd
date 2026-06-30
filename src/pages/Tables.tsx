@@ -13,7 +13,7 @@ import {
 import { ArrowBack, People } from '@mui/icons-material'
 import WorkerTable from '../components/WorkerTable'
 
-export default function Portfolio() {
+export default function Tables() {
   const navigate = useNavigate()
 
   return (

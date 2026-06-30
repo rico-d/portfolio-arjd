@@ -3,7 +3,7 @@ import { API } from '../types'
 
 // ── API Helpers ──────────────────────────────────────────────────────────────
 
-const API_URL = import.meta.env.VITE_API_URL + '/api';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export async function apiFetch<T>(endpoint: string): Promise<T> {
   try {

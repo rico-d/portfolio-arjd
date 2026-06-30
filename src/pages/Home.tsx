@@ -35,16 +35,28 @@ import Bio from '../components/Bio'
 const skills = [
   'React', 'TypeScript', 'JavaScript', 'Node.js',
   'HTML5', 'CSS3', 'Material UI', 'Git',
-  'REST APIs', 'SQL', 'Python', 'Vite',
+  'REST APIs', 'SQL', 'Python', 'Vite', '.NET Core', 'MongoDB', 'Express.js', 'Next.js',
+  'C#', 'Azure', 'Docker', 'Kubernetes', 'Jest', 'Redux', 'Sass',
 ]
 
-const projects = [
+const portfolioSamples = [
   {
-    title: 'E-Commerce Platform',
-    description: 'A full-stack e-commerce solution with product management, shopping cart, and payment integration.',
-    tags: ['React', 'Node.js', 'MongoDB'],
-    github: '#',
-    live: '#',
+    id: 'worker-management',
+    title: 'Worker Management System',
+    description: 'A full CRUD application built with React, Node.js, Express, and MongoDB. Manage workers with sorting, filtering, pagination, and real-time updates.',
+    icon: 'People',
+    tags: ['Table', 'CRUD', 'REST API', 'MongoDB'],
+    route: '/tables',
+    buttonLabel: 'Open Sample',
+  },
+  {
+    id: 'ecommerce',
+    title: 'Full-Stack E-Commerce Platform',
+    description: 'Product catalog, shopping cart, checkout with payment integration (Stripe/PayPal), and an admin dashboard for managing inventory and orders.',
+    icon: 'ShoppingCart',
+    tags: ['User Roles', 'Payment APIs', 'Complex Data Modeling', 'CRUD', 'REST API', 'MongoDB'],
+    route: '/ecommerce',
+    buttonLabel: 'Open E-Commerce Platform',
   },
 ]
 
@@ -53,6 +65,11 @@ export default function Home() {
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const iconMap: { [key: string]: React.ReactNode } = {
+    People: <People sx={{ fontSize: 48, color: '#1565c0' }} />,
+    ShoppingCart: <ShoppingCart sx={{ fontSize: 48, color: '#1565c0' }} />,
   }
 
   return (
@@ -65,7 +82,7 @@ export default function Home() {
             Rico.dev
           </Typography>
           <Stack direction="row" spacing={1}>
-            {['about', 'bio', 'skills', 'projects', 'contact'].map((section) => (
+            {['about', 'bio', 'skills', 'portfolio', 'contact'].map((section) => (
               <Button key={section} sx={{ color: '#ccc', textTransform: 'capitalize' }}
                 onClick={() => scrollTo(section)}>
                 {section.charAt(0).toUpperCase() + section.slice(1)}
@@ -73,9 +90,9 @@ export default function Home() {
             ))}
             <Button
               sx={{ color: '#90caf9', textTransform: 'capitalize', fontWeight: 700 }}
-              onClick={() => navigate('/portfolio')}
+              onClick={() => navigate('/tables')}
             >
-              Portfolio
+              Tables
             </Button>
             <Button
               sx={{ color: '#90caf9', textTransform: 'capitalize', fontWeight: 700 }}
@@ -127,20 +144,20 @@ export default function Home() {
                   </Typography>
                 </Box>
                 <Stack direction="row" spacing={2}>
-                  <IconButton href="https://github.com" target="_blank" sx={{ color: '#fff', border: '1px solid #333' }}>
+                  <IconButton href="https://github.com/rico-d" target="_blank" sx={{ color: '#fff', border: '1px solid #333' }}>
                     <GitHub />
                   </IconButton>
-                  <IconButton href="https://linkedin.com" target="_blank" sx={{ color: '#0a66c2', border: '1px solid #333' }}>
+                  <IconButton href="https://www.linkedin.com/in/alberto-rico-desalisa-4a154a84/" target="_blank" sx={{ color: '#0a66c2', border: '1px solid #333' }}>
                     <LinkedIn />
                   </IconButton>
-                  <IconButton href="mailto:rico@email.com" sx={{ color: '#ea4335', border: '1px solid #333' }}>
+                  <IconButton href="mailto:ricodesalisa@gmail.com" sx={{ color: '#ea4335', border: '1px solid #333' }}>
                     <Email />
                   </IconButton>
                 </Stack>
                 <Stack direction="row" spacing={2}>
                   <Button variant="contained" sx={{ bgcolor: '#1565c0', borderRadius: 2, px: 4 }}
-                    onClick={() => scrollTo('projects')}>
-                    View Projects
+                    onClick={() => scrollTo('portfolio')}>
+                    View Portfolio
                   </Button>
                   <Button variant="outlined" sx={{ borderColor: '#444', color: '#ccc', borderRadius: 2, px: 4 }}
                     onClick={() => scrollTo('contact')}>
@@ -217,135 +234,58 @@ export default function Home() {
         </Container>
       </Box>
 
-      {/* Projects */}
-      <Box id="projects" sx={{ py: 10, bgcolor: '#111' }}>
-        <Container maxWidth="xl" sx={{ px: { xs: 3, lg: 8 } }}>
-          <Stack direction="row" alignItems="center" spacing={1} mb={4}>
-            <Work sx={{ color: '#90caf9' }} />
-            <Typography variant="h4" fontWeight={700}>Projects</Typography>
-          </Stack>
-          <Divider sx={{ borderColor: '#222', mb: 4 }} />
-          <Grid container spacing={3}>
-            {projects.map((project) => (
-              <Grid key={project.title} size={{ xs: 12, sm: 6, md: 4, xl: 3 }}>
-                <Card sx={{
-                  bgcolor: '#1a1a1a',
-                  border: '1px solid #222',
-                  borderRadius: 3,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  transition: 'border-color 0.2s',
-                  '&:hover': { borderColor: '#1565c0' },
-                }}>
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography variant="h6" fontWeight={700} gutterBottom sx={{ color: '#fff' }}>
-                      {project.title}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: '#999', mb: 2 }}>
-                      {project.description}
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8 }}>
-                      {project.tags.map((tag) => (
-                        <Chip key={tag} label={tag} size="small" sx={{ bgcolor: '#0d1b2a', color: '#90caf9', fontSize: 11 }} />
-                      ))}
-                    </Box>
-                  </CardContent>
-                  <CardActions sx={{ px: 2, pb: 2, gap: 1 }}>
-                    <Link href={project.github} target="_blank" underline="none">
-                      <Button startIcon={<GitHub />} size="small" sx={{ color: '#ccc', textTransform: 'none' }}>Code</Button>
-                    </Link>
-                    <Link href={project.live} target="_blank" underline="none">
-                      <Button startIcon={<Launch />} size="small" sx={{ color: '#90caf9', textTransform: 'none' }}>Live</Button>
-                    </Link>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
+    
 
-      {/* Employee Table – Link to separate page */}
+      {/* Portfolio Samples */}
       <Box id="portfolio" sx={{ py: 10, bgcolor: '#0a0a0a' }}>
         <Container maxWidth="xl" sx={{ px: { xs: 3, lg: 8 } }}>
           <Stack direction="row" alignItems="center" spacing={1} mb={4}>
-            <People sx={{ color: '#90caf9' }} />
-            <Typography variant="h4" fontWeight={700}>Employee Table</Typography>
+            <Work sx={{ color: '#90caf9' }} />
+            <Typography variant="h4" fontWeight={700}>Portfolio Samples</Typography>
           </Stack>
           <Divider sx={{ borderColor: '#222', mb: 4 }} />
-          <Paper sx={{ p: 4, bgcolor: '#1a1a1a', border: '1px solid #222', borderRadius: 3, textAlign: 'center' }}>
-            <People sx={{ fontSize: 48, color: '#1565c0', mb: 2 }} />
-            <Typography variant="h6" fontWeight={700} gutterBottom>
-              Worker Management System
-            </Typography>
-            <Typography variant="body1" sx={{ color: '#999', mb: 3, maxWidth: 480, mx: 'auto' }}>
-              A full CRUD application built with React, Node.js, Express, and MongoDB.
-              Manage workers with sorting, filtering, pagination, and real-time updates.
-            </Typography>
-            <Button
-              variant="contained"
-              size="large"
-              endIcon={<OpenInNew />}
-              onClick={() => navigate('/portfolio')}
-              sx={{
-                bgcolor: '#1565c0',
-                textTransform: 'none',
-                borderRadius: 2,
-                px: 5,
-                py: 1.5,
-                fontSize: 16,
-                fontWeight: 600,
-                '&:hover': { bgcolor: '#1976d2' },
-              }}
-            >
-              Open Portfolio Dashboard
-            </Button>
-          </Paper>
-        </Container>
-      </Box>
-
-      {/* E-Commerce Platform – Link to separate page */}
-      <Box id="ecommerce" sx={{ py: 10, bgcolor: '#111' }}>
-        <Container maxWidth="xl" sx={{ px: { xs: 3, lg: 8 } }}>
-          <Stack direction="row" alignItems="center" spacing={1} mb={4}>
-            <ShoppingCart sx={{ color: '#90caf9' }} />
-            <Typography variant="h4" fontWeight={700}>E-Commerce Platform</Typography>
-          </Stack>
-          <Divider sx={{ borderColor: '#222', mb: 4 }} />
-          <Paper sx={{ p: 4, bgcolor: '#1a1a1a', border: '1px solid #222', borderRadius: 3, textAlign: 'center' }}>
-            <ShoppingCart sx={{ fontSize: 48, color: '#1565c0', mb: 2 }} />
-            <Typography variant="h6" fontWeight={700} gutterBottom>
-              Full-Stack E-Commerce Platform
-            </Typography>
-            <Typography variant="body1" sx={{ color: '#999', mb: 2, maxWidth: 560, mx: 'auto' }}>
-              Product catalog, shopping cart, checkout with payment integration (Stripe/PayPal),
-              and an admin dashboard for managing inventory and orders.
-            </Typography>
-            <Stack direction="row" spacing={1} justifyContent="center" mb={3} flexWrap="wrap" useFlexGap>
-              {['User Roles', 'Payment APIs', 'Complex Data Modeling', 'CRUD', 'REST API', 'MongoDB'].map((tag) => (
-                <Chip key={tag} label={tag} size="small" sx={{ bgcolor: '#0d1b2a', color: '#90caf9', border: '1px solid #1565c0' }} />
-              ))}
-            </Stack>
-            <Button
-              variant="contained"
-              size="large"
-              endIcon={<OpenInNew />}
-              onClick={() => navigate('/ecommerce')}
-              sx={{
-                bgcolor: '#1565c0',
-                textTransform: 'none',
-                borderRadius: 2,
-                px: 5,
-                py: 1.5,
-                fontSize: 16,
-                fontWeight: 600,
-                '&:hover': { bgcolor: '#1976d2' },
-              }}
-            >
-              Open E-Commerce Platform
-            </Button>
-          </Paper>
+          <Grid container spacing={4}>
+            {portfolioSamples.map((sample) => (
+              <Grid key={sample.id} size={{ xs: 12, md: 6 }}>
+                <Paper sx={{ p: 4, bgcolor: '#1a1a1a', border: '1px solid #222', borderRadius: 3, textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <Box sx={{ mb: 2, alignSelf: 'center' }}>
+                    {iconMap[sample.icon]}
+                  </Box>
+                  <Typography variant="h6" fontWeight={700} gutterBottom color="#90caf9">
+                    {sample.title}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: '#999', mb: 3, flex: 1 }}>
+                    {sample.description}
+                  </Typography>
+                  {sample.tags.length > 0 && (
+                    <Stack direction="row" spacing={1} justifyContent="center" mb={3} flexWrap="wrap" useFlexGap>
+                      {sample.tags.map((tag) => (
+                        <Chip key={tag} label={tag} size="small" sx={{ bgcolor: '#0d1b2a', color: '#90caf9', border: '1px solid #1565c0' }} />
+                      ))}
+                    </Stack>
+                  )}
+                  <Button
+                    variant="contained"
+                    size="large"
+                    endIcon={<OpenInNew />}
+                    onClick={() => navigate(sample.route)}
+                    sx={{
+                      bgcolor: '#1565c0',
+                      textTransform: 'none',
+                      borderRadius: 2,
+                      px: 5,
+                      py: 1.5,
+                      fontSize: 16,
+                      fontWeight: 600,
+                      '&:hover': { bgcolor: '#1976d2' },
+                    }}
+                  >
+                    {sample.buttonLabel}
+                  </Button>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
         </Container>
       </Box>
 
@@ -365,7 +305,7 @@ export default function Home() {
               <Button
                 variant="contained"
                 startIcon={<Email />}
-                href="mailto:rico@email.com"
+                href="mailto:ricodesalisa@gmail.com"
                 sx={{ bgcolor: '#1565c0', borderRadius: 2, px: 4, textTransform: 'none' }}
               >
                 Send Email
@@ -373,7 +313,7 @@ export default function Home() {
               <Button
                 variant="outlined"
                 startIcon={<LinkedIn />}
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/alberto-rico-desalisa-4a154a84/"
                 target="_blank"
                 sx={{ borderColor: '#0a66c2', color: '#0a66c2', borderRadius: 2, px: 4, textTransform: 'none' }}
               >
