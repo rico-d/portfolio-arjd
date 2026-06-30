@@ -104,7 +104,7 @@ module.exports = [
     name: 'Noise Cancelling Earbuds',
     description: 'True wireless earbuds with adaptive ANC, transparency mode, and premium sound quality.',
     price: 179.99,
-    image: 'https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=400',
+    image: 'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400',
     category: 'Electronics',
     stock: 55,
     rating: 4.6,
