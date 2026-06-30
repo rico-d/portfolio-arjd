@@ -1,8 +1,8 @@
 ﻿import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
-  Typography, Box, Container,
-  CircularProgress, Alert, Snackbar,
+  Typography, Box, Container, Grid,
+  Alert, Snackbar, Skeleton,
 } from '@mui/material'
 import './ECommerce.scss'
 
@@ -206,8 +206,21 @@ export default function ECommerce() {
       <TabBar tab={tab} onTabChange={setTab} userRole={user?.role} />
 
       {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-          <CircularProgress sx={{ color: '#4f46e5' }} />
+        <Box sx={{ py: 4 }}>
+          <Container maxWidth="xl" sx={{ px: { xs: 3, lg: 8 } }}>
+            <Grid container spacing={3}>
+              {Array.from({ length: 12 }).map((_, i) => (
+                <Grid key={i} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                  <Box className="product-card" sx={{ p: 2 }}>
+                    <Skeleton variant="rectangular" width="100%" height={200} sx={{ borderRadius: 1, mb: 2 }} />
+                    <Skeleton variant="text" width="80%" height={24} sx={{ mb: 1 }} />
+                    <Skeleton variant="text" width="100%" height={16} sx={{ mb: 2 }} />
+                    <Skeleton variant="text" width="60%" height={20} />
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </Container>
         </Box>
       ) : (
         <Box sx={{ py: 4 }}>

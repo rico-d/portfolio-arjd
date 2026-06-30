@@ -95,7 +95,7 @@ export default function AdminDeliveries({ orders, deliveryStats, onDeliveryStatu
                     <Chip label={o.status} size="small" className={`order-status-chip order-status-chip--${o.status.toLowerCase()}`} />
                   </TableCell>
                   <TableCell>
-                    <FormControl size="small" className="order-select" sx={{ minWidth: 170 }}>
+                    <FormControl size="small" className="order-select" sx={{ minWidth: 170 }} disabled={o.status === 'Cancelled'}>
                       <Select value={o.deliveryStatus || 'Pending'}
                         onChange={(e) => onDeliveryStatusChange(o._id, e.target.value as string)}>
                         {DELIVERY_STATUSES.map((s) => (
