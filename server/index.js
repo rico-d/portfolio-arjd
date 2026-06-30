@@ -67,7 +67,7 @@ app.use((err, req, res, next) => {
 
 // Connect to MongoDB (uses MongoMemoryServer if no local instance is available)
 async function startServer() {
-  let mongoUri = process.env.MONGO_URI
+  let mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI
 
   try {
     await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 3000 })
